@@ -29,6 +29,7 @@
 
 #include "common.h"
 #include "data_png.h"
+#include "data_binary.h"
 
 namespace dnnmark {
 
@@ -36,6 +37,7 @@ template <typename T>
 class Data {
  private:
   PseudoNumGenerator *png_;
+  BinaryLoader *binary_loader_;
   int size_;
   T *gpu_ptr_;
  public:
@@ -48,6 +50,10 @@ class Data {
     LOG(INFO) << "Free Data chunk of size " << size_;
     CUDA_CALL(cudaFree(gpu_ptr_));
     cudaFree(gpu_ptr_);
+  }
+  void Loader(std::string path, DataDim output_dim_) {
+    binary_loader_ = BinaryLoader::GetInstance();
+    binary_loader_->GenerateDataFromBinary(gpu_ptr_, size_, path, output_dim_);
   }
   void Filler() {
     png_ = PseudoNumGenerator::GetInstance();

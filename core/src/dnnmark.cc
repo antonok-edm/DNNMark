@@ -380,6 +380,8 @@ void DNNMark<T>::SetLayerParams(LayerType layer_type,
       name_id_map_[val] = current_layer_id;
     } else if (!var.compare("previous_layer")) {
       layers_map_[current_layer_id]->setPrevLayerName(val.c_str());
+    } else if (!var.compare("input_file")) {
+      layers_map_[current_layer_id]->setInputFile(val.c_str());
     }
   }
 }

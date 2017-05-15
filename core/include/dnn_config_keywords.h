@@ -57,7 +57,8 @@ const std::vector<std::string> data_config_keywords = {
   "c",
   "h",
   "w",
-  "previous_layer"
+  "previous_layer",
+  "input_file"
 };
 
 // Convolution layer keywords

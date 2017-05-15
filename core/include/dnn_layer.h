@@ -47,6 +47,7 @@ class Layer {
   int layer_id_;
   std::string layer_name_;
   std::string previous_layer_name_;
+  std::string input_file_;
   DataDim input_dim_;
   DataDim output_dim_;
   DataTensor<T> bottom_desc_;
@@ -85,6 +86,9 @@ class Layer {
   }
   void setPrevLayerName(const char *previous_layer_name) {
     previous_layer_name_.assign(previous_layer_name);
+  }
+  void setInputFile(const char *input_file) {
+    input_file_.assign(input_file);
   }
   void setLayerId(int layer_id) { layer_id_ = layer_id; }
   int getLayerId() { return layer_id_; }
@@ -140,6 +144,14 @@ class Layer {
         bottom_diffs_.push_back(
           data_manager_->GetData(bottom_diff_chunk_ids_[i]));
       }
+      
+      // Pull in data from a file
+      if (previous_layer_name_.compare("from_file")) {
+        for (int i = 0; i < num_bottoms_; i++) {
+          bottoms_[i]->Loader(input_file_, input_dim_);
+        }
+      }
+        
     } else {
       //
       // Composed mode
